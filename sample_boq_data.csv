@@ -1,0 +1,22 @@
+Item_Code,Description,Unit,Quantity,Bidder_A,Bidder_B,Bidder_C,Bidder_D
+01.01,Site Clearance,sqm,1000,15.50,14.80,16.20,15.00
+01.02,Excavation Works,cum,500,45.00,42.50,48.00,44.00
+01.03,Site Fencing,m,200,35.00,33.00,37.50,34.50
+02.01,Concrete Grade 30,cum,300,280.00,275.00,290.00,278.50
+02.02,Formwork,sqm,800,25.00,23.50,26.00,24.00
+02.03,Reinforcement Steel,kg,15000,4.50,4.30,4.70,4.40
+03.01,Brickwork,sqm,600,55.00,52.00,58.00,54.00
+03.02,Plastering,sqm,1200,18.00,17.50,19.00,17.80
+03.03,Painting,sqm,1200,12.00,11.50,13.00,11.80
+04.01,Floor Tiles,sqm,400,75.00,72.00,78.00,73.50
+04.02,Wall Tiles,sqm,300,65.00,63.00,68.00,64.50
+04.03,Sanitary Fittings,item,25,350.00,340.00,365.00,345.00
+05.01,Doors,item,30,850.00,820.00,880.00,835.00
+05.02,Windows,item,40,550.00,530.00,570.00,545.00
+05.03,Ironmongery,set,30,120.00,115.00,125.00,118.00
+06.01,Electrical Wiring,m,2000,8.50,8.20,8.80,8.35
+06.02,Light Fixtures,item,50,180.00,175.00,190.00,178.50
+06.03,Power Outlets,item,60,45.00,43.00,47.00,44.00
+07.01,Plumbing Pipes,m,800,22.00,21.00,23.50,21.50
+07.02,Water Fixtures,item,35,280.00,270.00,295.00,275.00
+07.03,Drainage Works,m,300,38.00,36.50,40.00,37.50

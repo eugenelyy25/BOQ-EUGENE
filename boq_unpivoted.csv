@@ -1,0 +1,85 @@
+Item_Code,Description,Unit,Quantity,Bidder,Unit_Rate,Category,Total_Amount
+01.01,Site Clearance,sqm,1000,Bidder_A,15.5,General Works,15500.0
+01.02,Excavation Works,cum,500,Bidder_A,45.0,General Works,22500.0
+01.03,Site Fencing,m,200,Bidder_A,35.0,General Works,7000.0
+02.01,Concrete Grade 30,cum,300,Bidder_A,280.0,Concrete & Formwork,84000.0
+02.02,Formwork,sqm,800,Bidder_A,25.0,Concrete & Formwork,20000.0
+02.03,Reinforcement Steel,kg,15000,Bidder_A,4.5,Concrete & Formwork,67500.0
+03.01,Brickwork,sqm,600,Bidder_A,55.0,Masonry & Finishes,33000.0
+03.02,Plastering,sqm,1200,Bidder_A,18.0,Masonry & Finishes,21600.0
+03.03,Painting,sqm,1200,Bidder_A,12.0,Masonry & Finishes,14400.0
+04.01,Floor Tiles,sqm,400,Bidder_A,75.0,Tiling & Fixtures,30000.0
+04.02,Wall Tiles,sqm,300,Bidder_A,65.0,Tiling & Fixtures,19500.0
+04.03,Sanitary Fittings,item,25,Bidder_A,350.0,Tiling & Fixtures,8750.0
+05.01,Doors,item,30,Bidder_A,850.0,Doors & Windows,25500.0
+05.02,Windows,item,40,Bidder_A,550.0,Doors & Windows,22000.0
+05.03,Ironmongery,set,30,Bidder_A,120.0,Doors & Windows,3600.0
+06.01,Electrical Wiring,m,2000,Bidder_A,8.5,Electrical Works,17000.0
+06.02,Light Fixtures,item,50,Bidder_A,180.0,Electrical Works,9000.0
+06.03,Power Outlets,item,60,Bidder_A,45.0,Electrical Works,2700.0
+07.01,Plumbing Pipes,m,800,Bidder_A,22.0,Plumbing & Drainage,17600.0
+07.02,Water Fixtures,item,35,Bidder_A,280.0,Plumbing & Drainage,9800.0
+07.03,Drainage Works,m,300,Bidder_A,38.0,Plumbing & Drainage,11400.0
+01.01,Site Clearance,sqm,1000,Bidder_B,14.8,General Works,14800.0
+01.02,Excavation Works,cum,500,Bidder_B,42.5,General Works,21250.0
+01.03,Site Fencing,m,200,Bidder_B,33.0,General Works,6600.0
+02.01,Concrete Grade 30,cum,300,Bidder_B,275.0,Concrete & Formwork,82500.0
+02.02,Formwork,sqm,800,Bidder_B,23.5,Concrete & Formwork,18800.0
+02.03,Reinforcement Steel,kg,15000,Bidder_B,4.3,Concrete & Formwork,64500.0
+03.01,Brickwork,sqm,600,Bidder_B,52.0,Masonry & Finishes,31200.0
+03.02,Plastering,sqm,1200,Bidder_B,17.5,Masonry & Finishes,21000.0
+03.03,Painting,sqm,1200,Bidder_B,11.5,Masonry & Finishes,13800.0
+04.01,Floor Tiles,sqm,400,Bidder_B,72.0,Tiling & Fixtures,28800.0
+04.02,Wall Tiles,sqm,300,Bidder_B,63.0,Tiling & Fixtures,18900.0
+04.03,Sanitary Fittings,item,25,Bidder_B,340.0,Tiling & Fixtures,8500.0
+05.01,Doors,item,30,Bidder_B,820.0,Doors & Windows,24600.0
+05.02,Windows,item,40,Bidder_B,530.0,Doors & Windows,21200.0
+05.03,Ironmongery,set,30,Bidder_B,115.0,Doors & Windows,3450.0
+06.01,Electrical Wiring,m,2000,Bidder_B,8.2,Electrical Works,16400.0
+06.02,Light Fixtures,item,50,Bidder_B,175.0,Electrical Works,8750.0
+06.03,Power Outlets,item,60,Bidder_B,43.0,Electrical Works,2580.0
+07.01,Plumbing Pipes,m,800,Bidder_B,21.0,Plumbing & Drainage,16800.0
+07.02,Water Fixtures,item,35,Bidder_B,270.0,Plumbing & Drainage,9450.0
+07.03,Drainage Works,m,300,Bidder_B,36.5,Plumbing & Drainage,10950.0
+01.01,Site Clearance,sqm,1000,Bidder_C,16.2,General Works,16200.0
+01.02,Excavation Works,cum,500,Bidder_C,48.0,General Works,24000.0
+01.03,Site Fencing,m,200,Bidder_C,37.5,General Works,7500.0
+02.01,Concrete Grade 30,cum,300,Bidder_C,290.0,Concrete & Formwork,87000.0
+02.02,Formwork,sqm,800,Bidder_C,26.0,Concrete & Formwork,20800.0
+02.03,Reinforcement Steel,kg,15000,Bidder_C,4.7,Concrete & Formwork,70500.0
+03.01,Brickwork,sqm,600,Bidder_C,58.0,Masonry & Finishes,34800.0
+03.02,Plastering,sqm,1200,Bidder_C,19.0,Masonry & Finishes,22800.0
+03.03,Painting,sqm,1200,Bidder_C,13.0,Masonry & Finishes,15600.0
+04.01,Floor Tiles,sqm,400,Bidder_C,78.0,Tiling & Fixtures,31200.0
+04.02,Wall Tiles,sqm,300,Bidder_C,68.0,Tiling & Fixtures,20400.0
+04.03,Sanitary Fittings,item,25,Bidder_C,365.0,Tiling & Fixtures,9125.0
+05.01,Doors,item,30,Bidder_C,880.0,Doors & Windows,26400.0
+05.02,Windows,item,40,Bidder_C,570.0,Doors & Windows,22800.0
+05.03,Ironmongery,set,30,Bidder_C,125.0,Doors & Windows,3750.0
+06.01,Electrical Wiring,m,2000,Bidder_C,8.8,Electrical Works,17600.0
+06.02,Light Fixtures,item,50,Bidder_C,190.0,Electrical Works,9500.0
+06.03,Power Outlets,item,60,Bidder_C,47.0,Electrical Works,2820.0
+07.01,Plumbing Pipes,m,800,Bidder_C,23.5,Plumbing & Drainage,18800.0
+07.02,Water Fixtures,item,35,Bidder_C,295.0,Plumbing & Drainage,10325.0
+07.03,Drainage Works,m,300,Bidder_C,40.0,Plumbing & Drainage,12000.0
+01.01,Site Clearance,sqm,1000,Bidder_D,15.0,General Works,15000.0
+01.02,Excavation Works,cum,500,Bidder_D,44.0,General Works,22000.0
+01.03,Site Fencing,m,200,Bidder_D,34.5,General Works,6900.0
+02.01,Concrete Grade 30,cum,300,Bidder_D,278.5,Concrete & Formwork,83550.0
+02.02,Formwork,sqm,800,Bidder_D,24.0,Concrete & Formwork,19200.0
+02.03,Reinforcement Steel,kg,15000,Bidder_D,4.4,Concrete & Formwork,66000.0
+03.01,Brickwork,sqm,600,Bidder_D,54.0,Masonry & Finishes,32400.0
+03.02,Plastering,sqm,1200,Bidder_D,17.8,Masonry & Finishes,21360.0
+03.03,Painting,sqm,1200,Bidder_D,11.8,Masonry & Finishes,14160.0
+04.01,Floor Tiles,sqm,400,Bidder_D,73.5,Tiling & Fixtures,29400.0
+04.02,Wall Tiles,sqm,300,Bidder_D,64.5,Tiling & Fixtures,19350.0
+04.03,Sanitary Fittings,item,25,Bidder_D,345.0,Tiling & Fixtures,8625.0
+05.01,Doors,item,30,Bidder_D,835.0,Doors & Windows,25050.0
+05.02,Windows,item,40,Bidder_D,545.0,Doors & Windows,21800.0
+05.03,Ironmongery,set,30,Bidder_D,118.0,Doors & Windows,3540.0
+06.01,Electrical Wiring,m,2000,Bidder_D,8.35,Electrical Works,16700.0
+06.02,Light Fixtures,item,50,Bidder_D,178.5,Electrical Works,8925.0
+06.03,Power Outlets,item,60,Bidder_D,44.0,Electrical Works,2640.0
+07.01,Plumbing Pipes,m,800,Bidder_D,21.5,Plumbing & Drainage,17200.0
+07.02,Water Fixtures,item,35,Bidder_D,275.0,Plumbing & Drainage,9625.0
+07.03,Drainage Works,m,300,Bidder_D,37.5,Plumbing & Drainage,11250.0

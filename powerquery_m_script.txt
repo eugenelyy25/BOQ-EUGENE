@@ -1,0 +1,327 @@
+// ============================================================================
+// POWER QUERY M SCRIPT FOR BOQ DATA TRANSFORMATION
+// Copy these steps into Power Query Editor in Power BI
+// ============================================================================
+
+// STEP 1: Load Source Data
+// ============================================================================
+let
+    Source = Csv.Document(
+        File.Contents("C:\Path\To\Your\sample_boq_data.csv"),
+        [Delimiter=",", Columns=8, Encoding=65001, QuoteStyle=QuoteStyle.None]
+    ),
+    
+    // Promote first row to headers
+    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+    
+    // Set data types
+    #"Changed Type" = Table.TransformColumnTypes(
+        #"Promoted Headers",
+        {
+            {"Item_Code", type text},
+            {"Description", type text},
+            {"Unit", type text},
+            {"Quantity", Int64.Type},
+            {"Bidder_A", type number},
+            {"Bidder_B", type number},
+            {"Bidder_C", type number},
+            {"Bidder_D", type number}
+        }
+    ),
+
+
+// STEP 2: Unpivot Bidder Columns
+// ============================================================================
+    // Select columns to keep (not unpivot)
+    #"Unpivoted Columns" = Table.UnpivotOtherColumns(
+        #"Changed Type",
+        {"Item_Code", "Description", "Unit", "Quantity"},
+        "Bidder",
+        "Unit_Rate"
+    ),
+
+
+// STEP 3: Add Category Column
+// ============================================================================
+    // Extract category from Item_Code prefix
+    #"Added Category" = Table.AddColumn(
+        #"Unpivoted Columns",
+        "Category",
+        each 
+            if Text.Start([Item_Code], 2) = "01" then "General Works"
+            else if Text.Start([Item_Code], 2) = "02" then "Concrete & Formwork"
+            else if Text.Start([Item_Code], 2) = "03" then "Masonry & Finishes"
+            else if Text.Start([Item_Code], 2) = "04" then "Tiling & Fixtures"
+            else if Text.Start([Item_Code], 2) = "05" then "Doors & Windows"
+            else if Text.Start([Item_Code], 2) = "06" then "Electrical Works"
+            else if Text.Start([Item_Code], 2) = "07" then "Plumbing & Drainage"
+            else "Other",
+        type text
+    ),
+
+
+// STEP 4: Calculate Total Amount
+// ============================================================================
+    #"Added Total Amount" = Table.AddColumn(
+        #"Added Category",
+        "Total_Amount",
+        each [Quantity] * [Unit_Rate],
+        type number
+    ),
+
+
+// STEP 5: Reorder Columns
+// ============================================================================
+    #"Reordered Columns" = Table.ReorderColumns(
+        #"Added Total Amount",
+        {
+            "Item_Code",
+            "Description",
+            "Category",
+            "Unit",
+            "Quantity",
+            "Bidder",
+            "Unit_Rate",
+            "Total_Amount"
+        }
+    )
+in
+    #"Reordered Columns"
+
+
+// ============================================================================
+// ALTERNATIVE: Custom Function for Dynamic Category Mapping
+// ============================================================================
+
+// Create this as a separate query named "fnGetCategory"
+(ItemCode as text) as text =>
+let
+    Prefix = Text.Start(ItemCode, 2),
+    CategoryMap = 
+        #table(
+            {"Prefix", "Category"},
+            {
+                {"01", "General Works"},
+                {"02", "Concrete & Formwork"},
+                {"03", "Masonry & Finishes"},
+                {"04", "Tiling & Fixtures"},
+                {"05", "Doors & Windows"},
+                {"06", "Electrical Works"},
+                {"07", "Plumbing & Drainage"}
+            }
+        ),
+    Result = 
+        try 
+            Table.SelectRows(CategoryMap, each [Prefix] = Prefix){0}[Category]
+        otherwise 
+            "Other"
+in
+    Result
+
+// Then use it in your main query:
+// #"Added Category" = Table.AddColumn(
+//     #"Unpivoted Columns",
+//     "Category",
+//     each fnGetCategory([Item_Code]),
+//     type text
+// )
+
+
+// ============================================================================
+// ADDITIONAL TRANSFORMATIONS (OPTIONAL)
+// ============================================================================
+
+// Add Index Column (useful for sorting)
+// ============================================================================
+#"Added Index" = Table.AddIndexColumn(
+    #"Reordered Columns",
+    "Index",
+    1,
+    1,
+    Int64.Type
+)
+
+
+// Add Bidder Rank per Item (requires grouping)
+// ============================================================================
+#"Grouped Rows" = Table.Group(
+    #"Added Total Amount",
+    {"Item_Code"},
+    {
+        {"AllData", 
+            each Table.AddColumn(
+                Table.AddIndexColumn(
+                    Table.Sort(_, {{"Unit_Rate", Order.Ascending}}),
+                    "Rank",
+                    1,
+                    1
+                ),
+                "Is_Lowest",
+                each if [Rank] = 1 then "Yes" else "No"
+            ),
+            type table
+        }
+    }
+),
+#"Expanded AllData" = Table.ExpandTableColumn(
+    #"Grouped Rows",
+    "AllData",
+    {"Description", "Unit", "Quantity", "Bidder", "Unit_Rate", "Category", "Total_Amount", "Rank", "Is_Lowest"}
+)
+
+
+// Calculate Running Total per Bidder
+// ============================================================================
+#"Added Running Total" = Table.AddColumn(
+    Table.Sort(#"Added Total Amount", {{"Item_Code", Order.Ascending}}),
+    "Running_Total",
+    each List.Sum(
+        List.FirstN(
+            #"Added Total Amount"[Total_Amount],
+            List.PositionOf(#"Added Total Amount"[Item_Code], [Item_Code]) + 1
+        )
+    ),
+    type number
+)
+
+
+// Identify Outliers using IQR method
+// ============================================================================
+let
+    // Calculate quartiles for Unit_Rate
+    SortedRates = List.Sort(#"Added Total Amount"[Unit_Rate]),
+    Count = List.Count(SortedRates),
+    Q1_Position = Number.RoundDown(Count * 0.25),
+    Q3_Position = Number.RoundDown(Count * 0.75),
+    Q1 = SortedRates{Q1_Position},
+    Q3 = SortedRates{Q3_Position},
+    IQR = Q3 - Q1,
+    LowerBound = Q1 - (1.5 * IQR),
+    UpperBound = Q3 + (1.5 * IQR),
+    
+    // Add outlier flag
+    #"Added Outlier Flag" = Table.AddColumn(
+        #"Added Total Amount",
+        "Is_Outlier",
+        each if [Unit_Rate] < LowerBound or [Unit_Rate] > UpperBound 
+             then "Yes" 
+             else "No",
+        type text
+    )
+in
+    #"Added Outlier Flag"
+
+
+// ============================================================================
+// PARAMETER QUERIES FOR DYNAMIC FILTERING
+// ============================================================================
+
+// Create parameter query for minimum amount threshold
+MinAmountThreshold = 0 meta [IsParameterQuery=true, Type="Number", IsParameterQueryRequired=true]
+
+// Use in filtering
+#"Filtered by Amount" = Table.SelectRows(
+    #"Added Total Amount",
+    each [Total_Amount] >= MinAmountThreshold
+)
+
+
+// Create parameter query for selected categories (List type)
+SelectedCategories = {"General Works", "Concrete & Formwork"} meta [IsParameterQuery=true, Type="List", IsParameterQueryRequired=true]
+
+// Use in filtering
+#"Filtered by Category" = Table.SelectRows(
+    #"Added Category",
+    each List.Contains(SelectedCategories, [Category])
+)
+
+
+// ============================================================================
+// COMPARISON TABLE (PIVOT-LIKE VIEW)
+// ============================================================================
+
+// Create a comparison table with bidders as columns
+let
+    Source = #"Added Total Amount",
+    
+    // Pivot table: Items as rows, Bidders as columns
+    Pivoted = Table.Pivot(
+        Source,
+        List.Distinct(Source[Bidder]),
+        "Bidder",
+        "Unit_Rate",
+        List.Sum
+    ),
+    
+    // Add lowest rate column
+    AddedLowest = Table.AddColumn(
+        Pivoted,
+        "Lowest_Rate",
+        each List.Min({[Bidder_A], [Bidder_B], [Bidder_C], [Bidder_D]}),
+        type number
+    ),
+    
+    // Add lowest bidder column
+    AddedLowestBidder = Table.AddColumn(
+        AddedLowest,
+        "Lowest_Bidder",
+        each 
+            if [Bidder_A] = [Lowest_Rate] then "Bidder_A"
+            else if [Bidder_B] = [Lowest_Rate] then "Bidder_B"
+            else if [Bidder_C] = [Lowest_Rate] then "Bidder_C"
+            else if [Bidder_D] = [Lowest_Rate] then "Bidder_D"
+            else null,
+        type text
+    )
+in
+    AddedLowestBidder
+
+
+// ============================================================================
+// USAGE INSTRUCTIONS
+// ============================================================================
+
+/*
+HOW TO USE THIS SCRIPT:
+
+1. IMPORT INTO POWER BI:
+   - Open Power BI Desktop
+   - Get Data → Text/CSV
+   - Select your BOQ CSV file
+   - Click "Transform Data" to open Power Query Editor
+
+2. REPLACE QUERY CODE:
+   - In Power Query Editor, click "Advanced Editor"
+   - Delete existing code
+   - Paste the main transformation script (STEPS 1-5)
+   - Update the file path in STEP 1 to match your file location
+   - Click "Done"
+
+3. VERIFY TRANSFORMATIONS:
+   - Check that columns are correctly typed
+   - Verify unpivoting worked (should have Bidder and Unit_Rate columns)
+   - Confirm Category column shows correct mappings
+   - Ensure Total_Amount is calculated properly
+
+4. OPTIONAL ENHANCEMENTS:
+   - Add any of the additional transformations as needed
+   - Create parameters for dynamic filtering
+   - Add the comparison table as a separate query
+
+5. LOAD DATA:
+   - Click "Close & Apply" to load transformed data into Power BI
+   - Data will be available for creating visualizations
+
+TIPS:
+- Test with a small sample first
+- Use Query Dependencies view to see relationships
+- Enable Load for queries you want in the model
+- Disable Load for helper/reference queries
+- Document your queries with descriptions
+
+TROUBLESHOOTING:
+- If error in Type Conversion: Check CSV encoding (should be UTF-8)
+- If Category shows "Other": Verify Item_Code is text type
+- If Unpivot fails: Ensure bidder columns have same data type
+- If Total_Amount is wrong: Check Quantity and Unit_Rate types
+*/

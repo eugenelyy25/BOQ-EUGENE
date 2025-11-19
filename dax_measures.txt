@@ -1,0 +1,303 @@
+// ============================================================================
+// DAX MEASURES FOR BOQ DASHBOARD
+// Copy these measures into Power BI Desktop
+// ============================================================================
+
+// BASIC AGGREGATIONS
+// ============================================================================
+
+Total Bid Amount = 
+SUM(BOQ_Data[Total_Amount])
+
+Average Unit Rate = 
+AVERAGE(BOQ_Data[Unit_Rate])
+
+Total Quantity = 
+SUM(BOQ_Data[Quantity])
+
+Item Count = 
+DISTINCTCOUNT(BOQ_Data[Item_Code])
+
+Average Item Amount = 
+DIVIDE([Total Bid Amount], [Item Count], 0)
+
+
+// BIDDER COMPARISON MEASURES
+// ============================================================================
+
+Lowest Bid = 
+MINX(
+    SUMMARIZE(
+        BOQ_Data, 
+        BOQ_Data[Bidder], 
+        "Total", SUM(BOQ_Data[Total_Amount])
+    ),
+    [Total]
+)
+
+Highest Bid = 
+MAXX(
+    SUMMARIZE(
+        BOQ_Data, 
+        BOQ_Data[Bidder], 
+        "Total", SUM(BOQ_Data[Total_Amount])
+    ),
+    [Total]
+)
+
+Bid Range = 
+[Highest Bid] - [Lowest Bid]
+
+Lowest Bidder = 
+VAR MinTotal = [Lowest Bid]
+RETURN
+CALCULATE(
+    SELECTEDVALUE(BOQ_Data[Bidder]),
+    FILTER(
+        ALL(BOQ_Data[Bidder]),
+        CALCULATE(SUM(BOQ_Data[Total_Amount])) = MinTotal
+    )
+)
+
+Highest Bidder = 
+VAR MaxTotal = [Highest Bid]
+RETURN
+CALCULATE(
+    SELECTEDVALUE(BOQ_Data[Bidder]),
+    FILTER(
+        ALL(BOQ_Data[Bidder]),
+        CALCULATE(SUM(BOQ_Data[Total_Amount])) = MaxTotal
+    )
+)
+
+
+// VARIANCE MEASURES
+// ============================================================================
+
+Variance from Lowest = 
+VAR CurrentTotal = [Total Bid Amount]
+VAR LowestTotal = [Lowest Bid]
+RETURN
+CurrentTotal - LowestTotal
+
+Percentage Variance from Lowest = 
+DIVIDE([Variance from Lowest], [Lowest Bid], 0) * 100
+
+Average Bid Amount = 
+AVERAGEX(
+    SUMMARIZE(
+        BOQ_Data, 
+        BOQ_Data[Bidder], 
+        "Total", SUM(BOQ_Data[Total_Amount])
+    ),
+    [Total]
+)
+
+Variance from Average = 
+[Total Bid Amount] - [Average Bid Amount]
+
+Percentage Variance from Average = 
+DIVIDE([Variance from Average], [Average Bid Amount], 0) * 100
+
+
+// STATISTICAL MEASURES
+// ============================================================================
+
+Unit Rate Standard Deviation = 
+STDEV.P(BOQ_Data[Unit_Rate])
+
+Unit Rate Coefficient of Variation = 
+DIVIDE([Unit Rate Standard Deviation], [Average Unit Rate], 0) * 100
+
+Min Unit Rate = 
+MIN(BOQ_Data[Unit_Rate])
+
+Max Unit Rate = 
+MAX(BOQ_Data[Unit_Rate])
+
+Unit Rate Range = 
+[Max Unit Rate] - [Min Unit Rate]
+
+
+// CATEGORY ANALYSIS MEASURES
+// ============================================================================
+
+Category Total = 
+CALCULATE(
+    SUM(BOQ_Data[Total_Amount]),
+    ALLEXCEPT(BOQ_Data, BOQ_Data[Category])
+)
+
+Category Percentage = 
+DIVIDE([Total Bid Amount], [Category Total], 0) * 100
+
+Lowest Category Bid = 
+CALCULATE(
+    [Lowest Bid],
+    ALLEXCEPT(BOQ_Data, BOQ_Data[Category])
+)
+
+Category Variance from Lowest = 
+[Total Bid Amount] - [Lowest Category Bid]
+
+
+// ITEM-LEVEL MEASURES
+// ============================================================================
+
+Item Lowest Rate = 
+CALCULATE(
+    MIN(BOQ_Data[Unit_Rate]),
+    ALLEXCEPT(BOQ_Data, BOQ_Data[Item_Code])
+)
+
+Item Highest Rate = 
+CALCULATE(
+    MAX(BOQ_Data[Unit_Rate]),
+    ALLEXCEPT(BOQ_Data, BOQ_Data[Item_Code])
+)
+
+Item Rate Variance = 
+[Item Highest Rate] - [Item Lowest Rate]
+
+Is Lowest Rate = 
+IF(
+    BOQ_Data[Unit_Rate] = [Item Lowest Rate],
+    "Yes",
+    "No"
+)
+
+
+// RANKING MEASURES
+// ============================================================================
+
+Bidder Rank = 
+RANKX(
+    ALL(BOQ_Data[Bidder]),
+    [Total Bid Amount],
+    ,
+    ASC,
+    Dense
+)
+
+Category Rank by Cost = 
+RANKX(
+    ALL(BOQ_Data[Category]),
+    [Total Bid Amount],
+    ,
+    DESC,
+    Dense
+)
+
+
+// ADJUSTED QUANTITY MEASURES (Use with Quantity Adjustment % parameter)
+// ============================================================================
+
+Adjusted Quantity = 
+SUMX(
+    BOQ_Data,
+    BOQ_Data[Quantity] * 'Quantity Adjustment %'[Quantity Adjustment % Value]
+)
+
+Adjusted Total Amount = 
+SUMX(
+    BOQ_Data,
+    BOQ_Data[Unit_Rate] * BOQ_Data[Quantity] * 'Quantity Adjustment %'[Quantity Adjustment % Value]
+)
+
+Adjustment Impact = 
+[Adjusted Total Amount] - [Total Bid Amount]
+
+Adjustment Impact Percentage = 
+DIVIDE([Adjustment Impact], [Total Bid Amount], 0) * 100
+
+
+// CONDITIONAL FORMATTING HELPERS
+// ============================================================================
+
+Is Winner = 
+IF([Total Bid Amount] = [Lowest Bid], 1, 0)
+
+Relative Position = 
+DIVIDE(
+    [Total Bid Amount] - [Lowest Bid],
+    [Highest Bid] - [Lowest Bid],
+    0
+)
+
+Color Scale = 
+SWITCH(
+    TRUE(),
+    [Relative Position] <= 0.2, "Green",
+    [Relative Position] <= 0.5, "Yellow",
+    [Relative Position] <= 0.8, "Orange",
+    "Red"
+)
+
+
+// KPI MEASURES
+// ============================================================================
+
+Bid Competitiveness Index = 
+// Lower is better (closer to lowest bid)
+DIVIDE(
+    [Variance from Lowest],
+    [Lowest Bid],
+    0
+)
+
+Cost Savings Potential = 
+// Savings if selecting lowest bidder per item vs current selection
+VAR LowestPerItem = 
+    SUMX(
+        VALUES(BOQ_Data[Item_Code]),
+        CALCULATE(
+            MIN(BOQ_Data[Unit_Rate]) * MAX(BOQ_Data[Quantity])
+        )
+    )
+RETURN
+[Total Bid Amount] - LowestPerItem
+
+Average Saving per Item = 
+DIVIDE([Cost Savings Potential], [Item Count], 0)
+
+
+// TIME INTELLIGENCE (if date dimension is added)
+// ============================================================================
+
+YTD Total = 
+// Requires a Date table with relationship
+TOTALYTD([Total Bid Amount], 'Date'[Date])
+
+Previous Period = 
+CALCULATE(
+    [Total Bid Amount],
+    DATEADD('Date'[Date], -1, MONTH)
+)
+
+Period over Period Change = 
+[Total Bid Amount] - [Previous Period]
+
+Period over Period % = 
+DIVIDE([Period over Period Change], [Previous Period], 0) * 100
+
+
+// DYNAMIC TITLES
+// ============================================================================
+
+Selected Bidder Title = 
+"Bid Analysis: " & SELECTEDVALUE(BOQ_Data[Bidder], "All Bidders")
+
+Selected Category Title = 
+"Category: " & SELECTEDVALUE(BOQ_Data[Category], "All Categories")
+
+Dashboard Title = 
+"BOQ Dashboard - Total Bids: " & FORMAT([Total Bid Amount], "$#,##0")
+
+
+// ============================================================================
+// NOTES:
+// - Replace 'BOQ_Data' with your actual table name
+// - Create the Quantity Adjustment % parameter before using adjusted measures
+// - Test all measures with your data to ensure correct calculations
+// - Add descriptions to measures for better documentation
+// ============================================================================
