@@ -1,0 +1,27 @@
+VERTICAL TRANSPORTATION SYSTEM,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,1,,,2,,,3,,,4,,
+,,,, BASE COST / SELECTION ,,100%, SUBMISSION ,, Eita ,,, Otis ,,, Schindler ,,, Kone ,,
+Item,Unit,Unit,Qty, Rate , Amount ,, Rate , Amount , Rate , Amount , REMARK , Rate , Amount , REMARK , Rate , Amount , REMARK , Rate , Amount , REMARK 
+,,,,,,,,,,,,,,,,,,,,
+,"VERTICAL TRANSPORTATION SYSTEM
+",,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+01.00,"PASSENGER  / FIRE LIFT
+",,,,,,,,,,,,,,,,,,,
+01.01,"PASSENGER  / FIRE LIFT as per specification.
+",Lot,4," 191,330.00 "," 765,320.00 ",," 191,330.00 "," 765,320.00 "," 153,500.00 "," 614,000.00 ",," 180,500.00 "," 722,000.00 ",," 214,500.00 "," 858,000.00 ",," 210,000.00 "," 840,000.00 ",
+,,,,,,,,,,,,,,,,,,,,
+02.00,"GOODS LIFT
+",,,,,,,,,,,,,,,,,,,
+02.01,"GOODS LIFT as per specification.
+",Lot,2," 495,020.00 "," 990,040.00 ",," 495,020.00 "," 990,040.00 "," 394,000.00 "," 788,000.00 ",," 467,000.00 "," 934,000.00 ",," 621,000.00 "," 1,242,000.00 "," cant meet the speed lift 1m/s
+proposed 0.5 "," 680,000.00 "," 1,360,000.00 "," cant do motor room, their standard is motorroomless "
+,,,,,,,,,,,,,,,,,,,,
+,"Prices for any other items not mentioned in the above breakdown, specified or not in the tender requirements and drawings but required for the completion, operation and maintenance of the complete installation.
+",,,,,,,,,,,,,,,,,,,
+L,"SST (6%) (OTIS)
+",,,,,,,,,,,," 99,360.00 ",,,,,,,
+M,,,,,,,,,,,,,,,,,,,,
+N,,,,,,,,,,,,,,,,,,,,
+,Grand Total for Lift (RM),,,," 1,755,360.00 ",,," 1,755,360.00 ",," 1,402,000.00 ",,," 1,755,360.00 ",,," 2,100,000.00 ",,," 2,200,000.00 ",
