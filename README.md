@@ -1,4 +1,4 @@
-# BOQ-EUGENE
+# SMART BOQ
 An Open-Source BOQ template from YTL Database
 
 Smart BQ Analyzer (AI System Prompt)
