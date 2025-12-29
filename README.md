@@ -88,6 +88,29 @@ Project: Thistle Hotel Item: Rectification of SMATV System Rate: $4,500.00 Total
 ⚙️ Technical Logic
 Header Recognition: The script scans the first few rows of the Excel file to find the true header, ensuring that metadata or blank rows at the top of the sheet do not break the import.
 
+---
+How to use this practically:
+Day 1:
+
+Paste the prompt above.
+
+Upload Thistle_BQ.xlsx -> "Thistle : Hotel : ELV : 2024"
+
+Upload Office_BQ.xlsx -> "Office A : Commercial : HVAC : 2024"
+
+Ask: AI : Compare 25mm conduit rates
+
+Finish: Ask AI : Export Database. Save the CSV file I generate.
+
+Day 30 (New or Same Chat):
+
+Paste the prompt above (if it's a new chat).
+
+Upload the CSV file from Day 1 -> "Restore Database".
+
+Upload New_Project.xlsx.
+
+Now you can compare the New Project against the data from Day 1!
 Normalization: The AI uses an internal dictionary/logic to map abbreviations to full descriptions in the Standardized_Item column, ensuring that "Conc." and "Concrete" are treated as the same item during analysis.
 
 Aggregation: All uploads are appended to a single master_df, enabling cross-project analysis.
