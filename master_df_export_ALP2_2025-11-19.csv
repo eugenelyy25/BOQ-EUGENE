@@ -1,0 +1,15 @@
+export_date,2025-12-30
+export_type,summary
+project,ALP2
+total_rows,2784
+
+Project,Type,Trade,Date,Description,Standardized_Item,Unit,Qty,Subcon_Name,Rate,Total_Amount
+ALP2,WAREHOUSE,LIFT,2025-11-19,Summary record,All Lift items,Lot,,SUMMARY,,19
+ALP2,WAREHOUSE,HDD,2025-11-19,Summary record,All HDD items,Lot,,SUMMARY,,77
+ALP2,WAREHOUSE,BMS,2025-11-19,Summary record,All BMS items,Lot,,SUMMARY,,320
+ALP2,WAREHOUSE,FIRE,2025-11-19,Summary record,All FIRE items,Lot,,SUMMARY,,296
+ALP2,WAREHOUSE,ACMV,2025-11-19,Summary record,All ACMV items,Lot,,SUMMARY,,328
+ALP2,WAREHOUSE,CWSP,2025-11-19,Summary record,All CWSP items,Lot,,SUMMARY,,624
+ALP2,WAREHOUSE,ELV,2025-11-19,Summary record,All ELV items,Lot,,SUMMARY,,364
+ALP2,WAREHOUSE,ELP,2025-11-19,Summary record,All ELP items,Lot,,SUMMARY,,208
+ALP2,WAREHOUSE,ELEC,2025-11-19,Summary record,All ELEC items,Lot,,SUMMARY,,548
